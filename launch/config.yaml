@@ -1,0 +1,7 @@
+1号玩家: .\clients\imitation_client.py
+2号玩家: .\clients\client2.py
+3号玩家: .\clients\client3.py
+4号玩家: .\clients\client4.py
+服务启动端路径: .\simulator\windows\server.exe
+渲染列表: []
+游玩次数: 10

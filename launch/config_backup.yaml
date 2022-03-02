@@ -1,0 +1,19 @@
+# 2022.2.10 Kirigaya
+# 注意了，所有的相对路径的根目录均为项目根目录，而非所在文件夹
+# Windows 系统使用\\作为文件分隔符， Linux使用/作为文件分隔符
+
+游玩次数 : 10   
+服务启动端路径 : ".\\test\\platform\\windows\\server.exe"   # 端口写死了，为23456，请勿占用
+
+1号玩家 : ".\\clients\\client1.py"
+2号玩家 : ".\\clients\\client2.py"
+3号玩家 : ".\\clients\\client3.py"
+4号玩家 : ".\\clients\\client4.py"
+
+渲染列表 : 
+- 0
+# 如果需要渲染所有的 client 的调试信息，将 渲染列表 改成 
+# - 0
+# - 1
+# - 2
+# - 3
