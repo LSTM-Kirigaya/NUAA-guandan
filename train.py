@@ -5,7 +5,9 @@
 # @Description: training wrapping launch.py
 
 import argparse
-from util import check_path
+
+from sympy import arg
+from util import check_path, lock_model_path
 import yaml, os
 
 parser = argparse.ArgumentParser()
@@ -61,6 +63,14 @@ parser.add_argument(
     '--gamma', default=0.98, type=float,
     help="decount factor when doing reinforcement learning"
 )
+parser.add_argument(
+    "--lock_value", default=None, type=float,
+    help="指定该值，系统会自动去model文件夹中索取value=lock_value的checkpoints"
+)
+parser.add_argument(
+    "--lock_reward", default=None, type=float,
+    help="指定该值，系统会自动去model文件夹中索取reward=lock_reward的checkpoints"
+)
 
 # 特殊的参数
 parser.add_argument(
@@ -105,10 +115,18 @@ if __name__ == "__main__":
     with open("launch/config.yaml", "w", encoding="utf-8") as fp:
         yaml.dump(config_dict, fp, Dumper=yaml.Dumper, allow_unicode=True)
 
+    
+    if args["lock_value"]:
+        model = lock_model_path(args["lock_value"], keyword="value")
+    elif args["lock_reward"]:
+        model = lock_model_path(args["lock_reward"], keyword="reward")
+    else:
+        model = args["model"]
+
     ret = os.system("python -u ./launch/launch.py -d {} --model {} --lr {} --save_interval {} --log_interval {} \
         --agent1 {} --agent2 {} --agent3 {} --agent4 {}".format(
         args["device"],
-        args["model"],
+        model,
         args["lr"],
         args["save_interval"],
         args["log_interval"],

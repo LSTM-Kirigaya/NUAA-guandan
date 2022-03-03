@@ -96,6 +96,8 @@ class MLPAction(object):
         save_state_dict = STATE_DICT.get("model_state_dict", None)
         if save_state_dict:
             self.ValueNet.load_state_dict(save_state_dict)
+            print(Back.GREEN, "成功载入模型 : ", MODEL, " 3秒后开始训练", Style.RESET_ALL)
+            time.sleep(3)
 
         self.optimizer = torch.optim.SGD(self.ValueNet.parameters(), lr=LEARNING_RATE)   
 

@@ -149,8 +149,9 @@ class MemoryBuffer:
             actionListNext = frame[5]
             history_next   = frame[6]
             done           = frame[7]
-            reward = torch.FloatTensor(reward)
-            if done:
+            reward = torch.FloatTensor([reward])
+            if done == False:
+                print(reward, type(reward), reward.shape)
                 final_reward = reward.item()
                 # 计算max Q(S, *)
                 q_values = []
@@ -180,6 +181,19 @@ class MemoryBuffer:
 
         self.clear()
         return losses, final_reward
+
+def lock_model_path(value, model_root="./model", keyword="value", reverse=True):
+    iter_obj = os.listdir(model_root)
+    if reverse:
+        iter_obj.reverse()
+    for checkpoints in iter_obj:
+        check_path = os.path.join(model_root, checkpoints)
+        for pth in os.listdir(check_path):
+            if pth.endswith("pth"):
+                params = pth[:-4].split("_")
+                if params[-2] == keyword and float(params[-1]) == value:
+                    return os.path.join(check_path, pth)
+    return ""
 
 if __name__ == "__main__":
     actionList = [['PASS', 'PASS', 'PASS'], ['Straight', 'T', ['ST', 'SJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'SJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'SJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'SJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'SJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'SJ', 'CQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'CQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'CQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'CQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'CQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'CQ', 'DK', 'HA']], ['Bomb', 'J', ['SJ', 'HJ', 'HJ', 'CJ']], ['StraightFlush', '7', ['S7', 'S8', 'S9', 'ST', 'SJ']], ['StraightFlush', '8', ['S8', 'S9', 'ST', 'SJ', 'SQ']], ['StraightFlush', '9', ['S9', 'ST', 'SJ', 'SQ', 'SK']]]

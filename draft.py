@@ -1,37 +1,22 @@
 import argparse
 import torch
 import random
-
+import os
 from copy import deepcopy
 
-class demo:
-    def __init__(self) -> None:
-        self.buff = []
-    
-    def append(self, a):
-        self.buff.append(deepcopy(a))
 
+# TODO : 实现当模仿学习的 value 为 nan 时，自动重启 
+def lock_value(value, model_root="./model", reverse=False):
+    iter_obj = os.listdir(model_root)
+    if reverse:
+        iter_obj.reverse()
+    for checkpoints in iter_obj:
+        print(checkpoints)
+        check_path = os.path.join(model_root, checkpoints)
+        for pth in os.listdir(check_path):
+            if pth.endswith("pth"):
+                params = pth[:-4].split("_")
+                if params[-2] == "value" and float(params[-1]) == value:
+                    return os.path.join(check_path, pth)
 
-parser = argparse.ArgumentParser()
-
-parser.add_argument('-d', default=None, type=str)
-
-state = torch.load(r"E:\Project\NUAA-guandan\model\checkpoints_2022_2_13_13_48_5\2022_2_13_13_48_9_value_-0.0.pth")
-
-a = {1 : 1, 2 : 2}
-
-print(id(a))
-
-d = demo()
-
-a[1] = 1
-a[2] = 5
-
-d.append(a)
-
-a[1] = 4
-a[2] = 7
-
-d.append(a)
-
-print(d.buff)
+print(lock_value(433.502, reverse=True))

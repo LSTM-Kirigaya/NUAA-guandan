@@ -16,12 +16,12 @@ from util import *
 from model import ActionValueNet
 from colorama import Back, Style
 import torch
-from copy import deepcopy
+import time
 
 from coach.EggPan.action import Action
 
 arg = argparse.ArgumentParser()
-arg.add_argument('-r', '--render', default=True, type=bool)
+arg.add_argument('-r', '--render', default=False, type=bool)
 arg.add_argument('-c', '--client', default="Demo")
 arg.add_argument('-d', '--device', default="cpu")
 arg.add_argument('--model',        default=None, type=str,  help="path of the model, is None")
@@ -31,6 +31,7 @@ arg.add_argument('--log_interval', default=100,  type=int,  help="frequency of l
 arg.add_argument('--epsilon',      default=0.1,  type=float,help="epislon-greed strategy probility")
 arg.add_argument('--gamma',        default=0.98, type=float,help="decount factor when doing reinforcement learning")
 args = vars(arg.parse_args())
+
 
 
 MODE          = "Reinforcement Learning"
@@ -111,11 +112,15 @@ class ExampleClient(WebSocketClient):
             game_order = message["order"]
             reward = self.get_reward(game_order)
             history = self.action.MapHistoryToLSTM().to(DEVICE)
-            self.action.update_post(reward=reward, obs_next=None, history_next=history, done=True)
+            self.action.update_post(reward=reward, obs_next=None, history_next=history, done=True, actionListNext=None)
             self.action.send_buffer()
 
             # 进行更新
-            losses, final_reward = self.action.replay_memory.learn_from(gamma=GAMMA)
+            losses, final_reward = self.action.replay_memory.learn_from(
+                gamma=GAMMA, 
+                optimizer=self.action.optimizer,
+                ValueNet=self.action.ValueNet
+            )
             
             if self.episode % SAVE_INTERVAL == 0:
                 torch.save({
@@ -165,6 +170,8 @@ class MLPAction(object):
         save_state_dict = STATE_DICT.get("model_state_dict", None)
         if save_state_dict:
             self.ValueNet.load_state_dict(save_state_dict)
+            print(Back.GREEN, "成功载入模型 : ", MODEL, " 3秒后开始训练", Style.RESET_ALL)
+            time.sleep(3)
 
         self.optimizer = torch.optim.SGD(self.ValueNet.parameters(), lr=LEARNING_RATE)   
 
@@ -223,7 +230,7 @@ class MLPAction(object):
                 state_action_input = state_input.unsqueeze(0).float().to(DEVICE)
                 q_value : torch.Tensor = self.ValueNet(state_action_input, history).sum()
                 q_values.append(q_value.item())
-            index = np.argmax(q_values)
+            index = np.argmax(q_values).item()
         else:
             index = random.choice(range(self.act_range + 1))
         
@@ -237,6 +244,7 @@ class MLPAction(object):
         # 整合策略： state + history -> state  action -> action
 
         self.history_action.append(process_card_list(msg["actionList"][index]))
+
         return index
 
 if __name__ == '__main__':
