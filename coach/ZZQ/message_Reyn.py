@@ -56,7 +56,7 @@ def get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards
                 ok = 0
         if ok == 1:
             val += 200 * point_val[i]
-            # print('Reyn_AI Tip 扫描到同花顺，点数为:', point_val[i])
+            # # print('Reyn_AI Tip 扫描到同花顺，点数为:', point_val[i])
     for i in range(9):
         ok = 1
         for j in range(5):
@@ -64,7 +64,7 @@ def get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards
                 ok = 0
         if ok == 1:
             val += 50 * point_val[i]
-            # print('Reyn_AI Tip 扫描到同花顺，点数为:', point_val[i])
+            # # print('Reyn_AI Tip 扫描到同花顺，点数为:', point_val[i])
     for i in range(9):
         ok = 1
         for j in range(5):
@@ -72,14 +72,14 @@ def get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards
                 ok = 0
         if ok == 1:
             val += 50 * point_val[i]
-            # print('Reyn_AI Tip 扫描到同花顺，点数为:', point_val[i])
+            # # print('Reyn_AI Tip 扫描到同花顺，点数为:', point_val[i])
     for i in range(9):
         ok = 1
         for j in range(5):
             ok = 0
         if ok == 1:
             val += 50 * point_val[i]
-            # print('Reyn_AI Tip 扫描到同花顺，点数为:', point_val[i])
+            # # print('Reyn_AI Tip 扫描到同花顺，点数为:', point_val[i])
     # 再考虑其他的
     for i in range(13):
         # 单张
@@ -107,68 +107,68 @@ def get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards
 # 本函数负责计算敌人手牌的价值-没用到
 def get_opp_VAL(card, curRank):
     if card[0] == 'Single':
-        print('Reyn_AI Tip 确认敌人Action为Single形式')
+        # print('Reyn_AI Tip 确认敌人Action为Single形式')
         val = 0
         val += get_point_val(card[2][0], curRank)
-        print('Reyn_AI Tip 敌人的出牌权值为', val)
+        # print('Reyn_AI Tip 敌人的出牌权值为', val)
         return val
     if card[0] == 'Pair':
-        print('Reyn_AI Tip 确认敌人Action为Pair形式')
+        # print('Reyn_AI Tip 确认敌人Action为Pair形式')
         val = 20
         val += get_point_val(card[2][0], curRank)
         val += get_point_val(card[2][1], curRank)
-        print('Reyn_AI Tip 敌人的出牌权值为', val)
+        # print('Reyn_AI Tip 敌人的出牌权值为', val)
         return val
     if card[0] == 'Trips':
-        print('Reyn_AI Tip 确认敌人Action为Trips形式')
+        # print('Reyn_AI Tip 确认敌人Action为Trips形式')
         val = 100
         val += get_point_val(card[2][0], curRank)
         val += get_point_val(card[2][1], curRank)
         val += get_point_val(card[2][2], curRank)
         val += 5 * get_point_val(card[2][0], curRank)
-        print('Reyn_AI Tip 敌人的出牌权值为', val)
+        # print('Reyn_AI Tip 敌人的出牌权值为', val)
         return val
     if card[0] == 'Bomb' and len(card[2]) == 4:
-        print('Reyn_AI Tip 确认敌人Action为Bomb_4形式')
+        # print('Reyn_AI Tip 确认敌人Action为Bomb_4形式')
         val = get_point_val(card[2][0], curRank)
         val += get_point_val(card[2][1], curRank)
         val += get_point_val(card[2][2], curRank)
         val += get_point_val(card[2][3], curRank)
         val += 100 * get_point_val(card[2][0], curRank)
-        print('Reyn_AI Tip 敌人出牌权值为', val)
+        # print('Reyn_AI Tip 敌人出牌权值为', val)
         return val
     if card[0] == 'Bomb' and len(card[2]) == 5:
-        print('Reyn_AI Tip 确认敌人Action为Bomb形式')
+        # print('Reyn_AI Tip 确认敌人Action为Bomb形式')
         val = get_point_val(card[2][0], curRank)
         val += get_point_val(card[2][1], curRank)
         val += get_point_val(card[2][2], curRank)
         val += get_point_val(card[2][3], curRank)
         val += get_point_val(card[2][4], curRank)
         val += 150 * get_point_val(card[2][0], curRank)
-        print('Reyn_AI Tip 敌人出牌权值为', val)
+        # print('Reyn_AI Tip 敌人出牌权值为', val)
         return val
     if card[0] == 'Straight':
-        print('Reyn_AI Tip 确认敌人Action为Straight形式')
+        # print('Reyn_AI Tip 确认敌人Action为Straight形式')
         val = get_point_val(card[2][0], curRank)
         val += get_point_val(card[2][1], curRank)
         val += get_point_val(card[2][2], curRank)
         val += get_point_val(card[2][3], curRank)
         val += get_point_val(card[2][4], curRank)
         val += 300
-        print('Reyn_AI Tip 敌人出牌权值为', val)
+        # print('Reyn_AI Tip 敌人出牌权值为', val)
         return val
     if card[0] == 'ThreeWithTwo':
-        print('Reyn_AI Tip 确认敌人Action为ThreeWithTwo形式')
+        # print('Reyn_AI Tip 确认敌人Action为ThreeWithTwo形式')
         val = get_point_val(card[2][0], curRank)
         val += get_point_val(card[2][1], curRank)
         val += get_point_val(card[2][2], curRank)
         val += get_point_val(card[2][3], curRank)
         val += get_point_val(card[2][4], curRank)
         val += 200
-        print('Reyn_AI Tip 敌人出牌权值为', val)
+        # print('Reyn_AI Tip 敌人出牌权值为', val)
         return val
     if card[0] == 'ThreePair':
-        print('Reyn_AI Tip 确认敌人Action为ThreePair形式')
+        # print('Reyn_AI Tip 确认敌人Action为ThreePair形式')
         val = get_point_val(card[2][0], curRank)
         val += get_point_val(card[2][1], curRank)
         val += get_point_val(card[2][2], curRank)
@@ -176,10 +176,10 @@ def get_opp_VAL(card, curRank):
         val += get_point_val(card[2][4], curRank)
         val += get_point_val(card[2][5], curRank)
         val += 150
-        print('Reyn_AI Tip 敌人出牌权值为', val)
+        # print('Reyn_AI Tip 敌人出牌权值为', val)
         return val
     if card[0] == 'TwoTrips':
-        print('Reyn_AI Tip 确认敌人Action为TwoTrips形式')
+        # print('Reyn_AI Tip 确认敌人Action为TwoTrips形式')
         val = get_point_val(card[2][0], curRank)
         val += get_point_val(card[2][1], curRank)
         val += get_point_val(card[2][2], curRank)
@@ -187,17 +187,17 @@ def get_opp_VAL(card, curRank):
         val += get_point_val(card[2][4], curRank)
         val += get_point_val(card[2][5], curRank)
         val += 120
-        print('Reyn_AI Tip 敌人出牌权值为', val)
+        # print('Reyn_AI Tip 敌人出牌权值为', val)
         return val
     if card[0] == 'StraightFlush':
-        print('Reyn_AI Tip 确认敌人Action为StraightFlush形式')
+        # print('Reyn_AI Tip 确认敌人Action为StraightFlush形式')
         val = get_point_val(card[2][0], curRank)
         val += get_point_val(card[2][1], curRank)
         val += get_point_val(card[2][2], curRank)
         val += get_point_val(card[2][3], curRank)
         val += get_point_val(card[2][4], curRank)
         val += 180 * get_point_val(card[2][0], curRank)
-        print('Reyn_AI Tip 敌人出牌权值为', val)
+        # print('Reyn_AI Tip 敌人出牌权值为', val)
         return val
     return 3000
 
@@ -210,10 +210,10 @@ def get_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, han
     if card[0] == 'PASS':
         return -99999
     if card[0] == 'Single':
-        # print('Reyn_AI Tip 确认该Action为Single形式')
+        # # print('Reyn_AI Tip 确认该Action为Single形式')
         val = 100
         val -= get_point_val(card[2][0], curRank)
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -235,14 +235,14 @@ def get_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, han
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'Pair':
-        # print('Reyn_AI Tip 确认该Action为Pair形式')
+        # # print('Reyn_AI Tip 确认该Action为Pair形式')
         val = 100
         val -= get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -282,16 +282,16 @@ def get_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, han
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'Trips':
-        # print('Reyn_AI Tip 确认该Action为Trips形式')
+        # # print('Reyn_AI Tip 确认该Action为Trips形式')
         val = 80
         val -= get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
         val -= get_point_val(card[2][2], curRank)
         val -= 5 * get_point_val(card[2][0], curRank)
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -349,16 +349,16 @@ def get_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, han
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'Bomb' and len(card[2]) == 4:
-        # print('Reyn_AI Tip 确认该Action为Bomb_4形式')
+        # # print('Reyn_AI Tip 确认该Action为Bomb_4形式')
         val = -get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
         val -= get_point_val(card[2][2], curRank)
         val -= get_point_val(card[2][3], curRank)
         val -= 100 * get_point_val(card[2][0], curRank)
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -434,17 +434,17 @@ def get_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, han
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'Bomb' and len(card[2]) == 5:
-        # print('Reyn_AI Tip 确认该Action为Bomb形式')
+        # # print('Reyn_AI Tip 确认该Action为Bomb形式')
         val = -get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
         val -= get_point_val(card[2][2], curRank)
         val -= get_point_val(card[2][3], curRank)
         val -= get_point_val(card[2][4], curRank)
         val -= 150 * get_point_val(card[2][0], curRank)
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -538,17 +538,17 @@ def get_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, han
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'Straight':
-        # print('Reyn_AI Tip 确认该Action为Straight形式')
+        # # print('Reyn_AI Tip 确认该Action为Straight形式')
         val = -get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
         val -= get_point_val(card[2][2], curRank)
         val -= get_point_val(card[2][3], curRank)
         val -= get_point_val(card[2][4], curRank)
         val += 200
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -642,17 +642,17 @@ def get_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, han
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'ThreeWithTwo':
-        # print('Reyn_AI Tip 确认该Action为ThreeWithTwo形式')
+        # # print('Reyn_AI Tip 确认该Action为ThreeWithTwo形式')
         val = -get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
         val -= get_point_val(card[2][2], curRank)
         val -= get_point_val(card[2][3], curRank)
         val -= get_point_val(card[2][4], curRank)
         val += 300
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -746,10 +746,10 @@ def get_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, han
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'ThreePair':
-        # print('Reyn_AI Tip 确认该Action为ThreePair形式')
+        # # print('Reyn_AI Tip 确认该Action为ThreePair形式')
         val = -get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
         val -= get_point_val(card[2][2], curRank)
@@ -757,7 +757,7 @@ def get_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, han
         val -= get_point_val(card[2][4], curRank)
         val -= get_point_val(card[2][5], curRank)
         val += 150
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -869,10 +869,10 @@ def get_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, han
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'TwoTrips':
-        # print('Reyn_AI Tip 确认该Action为TwoTrips形式')
+        # # print('Reyn_AI Tip 确认该Action为TwoTrips形式')
         val = -get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
         val -= get_point_val(card[2][2], curRank)
@@ -880,7 +880,7 @@ def get_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, han
         val -= get_point_val(card[2][4], curRank)
         val -= get_point_val(card[2][5], curRank)
         val += 120
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -992,17 +992,17 @@ def get_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, han
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'StraightFlush':
-        # print('Reyn_AI Tip 确认该Action为StraightFlush形式')
+        # # print('Reyn_AI Tip 确认该Action为StraightFlush形式')
         val = -get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
         val -= get_point_val(card[2][2], curRank)
         val -= get_point_val(card[2][3], curRank)
         val -= get_point_val(card[2][4], curRank)
         val -= 180 * get_point_val(card[2][0], curRank)
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -1096,7 +1096,7 @@ def get_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, han
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     return -1500
 
@@ -1108,9 +1108,9 @@ def get_VAL_OPP(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A,
     if card[0] == 'PASS':
         return -99999
     if card[0] == 'Single':
-        # print('Reyn_AI Tip 确认该Action为Single形式')
+        # # print('Reyn_AI Tip 确认该Action为Single形式')
         val = -get_point_val(card[2][0], curRank)
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -1132,13 +1132,13 @@ def get_VAL_OPP(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A,
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'Pair':
-        # print('Reyn_AI Tip 确认该Action为Pair形式')
+        # # print('Reyn_AI Tip 确认该Action为Pair形式')
         val = - get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -1178,15 +1178,15 @@ def get_VAL_OPP(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A,
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'Trips':
-        # print('Reyn_AI Tip 确认该Action为Trips形式')
+        # # print('Reyn_AI Tip 确认该Action为Trips形式')
         val = - get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
         val -= get_point_val(card[2][2], curRank)
         val -= 5 * get_point_val(card[2][0], curRank)
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -1244,16 +1244,16 @@ def get_VAL_OPP(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A,
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'Bomb' and len(card[2]) == 4:
-        # print('Reyn_AI Tip 确认该Action为Bomb_4形式')
+        # # print('Reyn_AI Tip 确认该Action为Bomb_4形式')
         val = -get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
         val -= get_point_val(card[2][2], curRank)
         val -= get_point_val(card[2][3], curRank)
         val -= 100 * get_point_val(card[2][0], curRank)
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -1329,17 +1329,17 @@ def get_VAL_OPP(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A,
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'Bomb' and len(card[2]) == 5:
-        # print('Reyn_AI Tip 确认该Action为Bomb形式')
+        # # print('Reyn_AI Tip 确认该Action为Bomb形式')
         val = -get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
         val -= get_point_val(card[2][2], curRank)
         val -= get_point_val(card[2][3], curRank)
         val -= get_point_val(card[2][4], curRank)
         val -= 150 * get_point_val(card[2][0], curRank)
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -1433,16 +1433,16 @@ def get_VAL_OPP(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A,
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'Straight':
-        # print('Reyn_AI Tip 确认该Action为Straight形式')
+        # # print('Reyn_AI Tip 确认该Action为Straight形式')
         val = -get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
         val -= get_point_val(card[2][2], curRank)
         val -= get_point_val(card[2][3], curRank)
         val -= get_point_val(card[2][4], curRank)
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -1536,16 +1536,16 @@ def get_VAL_OPP(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A,
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'ThreeWithTwo':
-        # print('Reyn_AI Tip 确认该Action为ThreeWithTwo形式')
+        # # print('Reyn_AI Tip 确认该Action为ThreeWithTwo形式')
         val = -get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
         val -= get_point_val(card[2][2], curRank)
         val -= get_point_val(card[2][3], curRank)
         val -= get_point_val(card[2][4], curRank)
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -1639,17 +1639,17 @@ def get_VAL_OPP(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A,
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'ThreePair':
-        # print('Reyn_AI Tip 确认该Action为ThreePair形式')
+        # # print('Reyn_AI Tip 确认该Action为ThreePair形式')
         val = -get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
         val -= get_point_val(card[2][2], curRank)
         val -= get_point_val(card[2][3], curRank)
         val -= get_point_val(card[2][4], curRank)
         val -= get_point_val(card[2][5], curRank)
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -1761,17 +1761,17 @@ def get_VAL_OPP(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A,
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'TwoTrips':
-        # print('Reyn_AI Tip 确认该Action为TwoTrips形式')
+        # # print('Reyn_AI Tip 确认该Action为TwoTrips形式')
         val = -get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
         val -= get_point_val(card[2][2], curRank)
         val -= get_point_val(card[2][3], curRank)
         val -= get_point_val(card[2][4], curRank)
         val -= get_point_val(card[2][5], curRank)
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -1883,17 +1883,17 @@ def get_VAL_OPP(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A,
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     if card[0] == 'StraightFlush':
-        # print('Reyn_AI Tip 确认该Action为StraightFlush形式')
+        # # print('Reyn_AI Tip 确认该Action为StraightFlush形式')
         val = -get_point_val(card[2][0], curRank)
         val -= get_point_val(card[2][1], curRank)
         val -= get_point_val(card[2][2], curRank)
         val -= get_point_val(card[2][3], curRank)
         val -= get_point_val(card[2][4], curRank)
         val -= 180 * get_point_val(card[2][0], curRank)
-        # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
+        # # print('Reyn_AI Tip 由于该出牌行动,权值目前为', val)
         # 开始删除刚刚打出的牌
         if card[2][0] == 'SB':
             handCards_K[0] -= 1
@@ -1987,7 +1987,7 @@ def get_VAL_OPP(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A,
                 handCards_R[2] -= 1
         val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
                               curRank)
-        # print('Reyn_AI Tip 已计算出该操作权重为', val)
+        # # print('Reyn_AI Tip 已计算出该操作权重为', val)
         return val
     return -1500
 
@@ -2014,7 +2014,7 @@ def get_num(point):
 def check_message(message, pos):
     # 读取当前牌局的等级
     curRank = message['curRank']
-    # print('Reyn_AI Tip 已读取到当前等级为:', curRank)
+    # # print('Reyn_AI Tip 已读取到当前等级为:', curRank)
 
     # 还贡判断
     if message['stage'] == 'back':
@@ -2024,9 +2024,9 @@ def check_message(message, pos):
         value = []
         for check_card in message['actionList']:
             index += 1
-            # print('Reyn_AI Tip 当前判断Action', index, ':', check_card)
+            # # print('Reyn_AI Tip 当前判断Action', index, ':', check_card)
             # 读取手牌部分开始
-            # print('Reyn_AI Log 进入到读取手牌部分')
+            # # print('Reyn_AI Log 进入到读取手牌部分')
             # 创建按花色和顺序归类好的牌库，数值为该牌拥有的数量
             # 黑桃:S 红桃:H 梅花:C 方片:D
             # 花色牌列表[数量] 序号-点数 分别为:[0-A,1-2,2-3,3-4,4-5,5-6,6-7,7-8,8-9,9-T,10-J,11-Q,12-K]
@@ -2065,19 +2065,19 @@ def check_message(message, pos):
                     if card[0] == 'D':
                         handCards_D[get_num(card[1])] += 1
                         handCards_A[get_num(card[1])] += 1
-            # print('Reyn_AI Log 读取手牌部分结束')
-            # print('Reyn_AI Tip 当前读取到的手牌为')
-            # print('handCards_S:',handCards_S)
-            # print('handCards_H:',handCards_H)
-            # print('handCards_C:',handCards_C)
-            # print('handCards_D:',handCards_D)
-            # print('handCards_A:',handCards_A)
-            # print('handCards_R:',handCards_R)
-            # print('handCards_K:',handCards_K)
+            # # print('Reyn_AI Log 读取手牌部分结束')
+            # # print('Reyn_AI Tip 当前读取到的手牌为')
+            # # print('handCards_S:',handCards_S)
+            # # print('handCards_H:',handCards_H)
+            # # print('handCards_C:',handCards_C)
+            # # print('handCards_D:',handCards_D)
+            # # print('handCards_A:',handCards_A)
+            # # print('handCards_R:',handCards_R)
+            # # print('handCards_K:',handCards_K)
             # 读取手牌部分结束
-            # print('Reyn_AI Tip 开始选择最优还贡牌')
+            # # print('Reyn_AI Tip 开始选择最优还贡牌')
             val = -get_point_val(check_card[2][0], curRank)
-            # print('Reyn_AI Tip 由于该还贡行动,权值目前为', val)
+            # # print('Reyn_AI Tip 由于该还贡行动,权值目前为', val)
             # 开始删除刚刚打出的牌
             if check_card[2][0] == 'SB':
                 handCards_K[0] -= 1
@@ -2099,7 +2099,7 @@ def check_message(message, pos):
                     handCards_R[2] -= 1
             val += get_remain_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R,
                                   handCards_K, curRank)
-            # print('Reyn_AI Tip 已计算出该操作权重为', val)
+            # # print('Reyn_AI Tip 已计算出该操作权重为', val)
             value.append(val)
         max = -50000
         AI_choice = 0
@@ -2107,21 +2107,21 @@ def check_message(message, pos):
             if value[i] > max:
                 AI_choice = i
                 max = value[i]
-        # print(value)
+        # # print(value)
         return AI_choice
 
     # 我方先手 AI选择部分开始
     if message['greaterPos'] == pos or message['greaterPos'] == -1:
-        # print('Reyn_AI Tip 轮到我方先手出牌')
+        # # print('Reyn_AI Tip 轮到我方先手出牌')
         # 开始遍历Actionlist
         index = -1
         # 创建空操作权重列表[权重值]
         value = []
         for check_card in message['actionList']:
             index += 1
-            # print('Reyn_AI Tip 当前判断Action', index, ':', check_card)
+            # # print('Reyn_AI Tip 当前判断Action', index, ':', check_card)
             # 读取手牌部分开始
-            # print('Reyn_AI Log 进入到读取手牌部分')
+            # # print('Reyn_AI Log 进入到读取手牌部分')
             # 创建按花色和顺序归类好的牌库，数值为该牌拥有的数量
             # 黑桃:S 红桃:H 梅花:C 方片:D
             # 花色牌列表[数量] 序号-点数 分别为:[0-A,1-2,2-3,3-4,4-5,5-6,6-7,7-8,8-9,9-T,10-J,11-Q,12-K]
@@ -2160,15 +2160,15 @@ def check_message(message, pos):
                     if card[0] == 'D':
                         handCards_D[get_num(card[1])] += 1
                         handCards_A[get_num(card[1])] += 1
-            # print('Reyn_AI Log 读取手牌部分结束')
-            # print('Reyn_AI Tip 当前读取到的手牌为')
-            # print('handCards_S:',handCards_S)
-            # print('handCards_H:',handCards_H)
-            # print('handCards_C:',handCards_C)
-            # print('handCards_D:',handCards_D)
-            # print('handCards_A:',handCards_A)
-            # print('handCards_R:',handCards_R)
-            # print('handCards_K:',handCards_K)
+            # # print('Reyn_AI Log 读取手牌部分结束')
+            # # print('Reyn_AI Tip 当前读取到的手牌为')
+            # # print('handCards_S:',handCards_S)
+            # # print('handCards_H:',handCards_H)
+            # # print('handCards_C:',handCards_C)
+            # # print('handCards_D:',handCards_D)
+            # # print('handCards_A:',handCards_A)
+            # # print('handCards_R:',handCards_R)
+            # # print('handCards_K:',handCards_K)
             # 读取手牌部分结束
             value.append(
                 get_VAL(handCards_S, handCards_H, handCards_C, handCards_D, handCards_A, handCards_R, handCards_K,
@@ -2179,7 +2179,7 @@ def check_message(message, pos):
             if value[i] > max:
                 AI_choice = i
                 max = value[i]
-        print(value)
+        # print(value)
         return AI_choice
 
     # 接队友牌
@@ -2231,16 +2231,16 @@ def check_message(message, pos):
             return 0
 
     else:
-        # print('Reyn_AI Tip 轮到我方迎接敌人')
+        # # print('Reyn_AI Tip 轮到我方迎接敌人')
         # 开始遍历Actionlist
         index = -1
         # 创建空操作权重列表[权重值]
         value = []
         for check_card in message['actionList']:
             index += 1
-            # print('Reyn_AI Tip 当前判断Action', index, ':', check_card)
+            # # print('Reyn_AI Tip 当前判断Action', index, ':', check_card)
             # 读取手牌部分开始
-            # print('Reyn_AI Log 进入到读取手牌部分')
+            # # print('Reyn_AI Log 进入到读取手牌部分')
             # 创建按花色和顺序归类好的牌库，数值为该牌拥有的数量
             # 黑桃:S 红桃:H 梅花:C 方片:D
             # 花色牌列表[数量] 序号-点数 分别为:[0-A,1-2,2-3,3-4,4-5,5-6,6-7,7-8,8-9,9-T,10-J,11-Q,12-K]
@@ -2279,15 +2279,15 @@ def check_message(message, pos):
                     if card[0] == 'D':
                         handCards_D[get_num(card[1])] += 1
                         handCards_A[get_num(card[1])] += 1
-            # print('Reyn_AI Log 读取手牌部分结束')
-            # print('Reyn_AI Tip 当前读取到的手牌为')
-            # print('handCards_S:',handCards_S)
-            # print('handCards_H:',handCards_H)
-            # print('handCards_C:',handCards_C)
-            # print('handCards_D:',handCards_D)
-            # print('handCards_A:',handCards_A)
-            # print('handCards_R:',handCards_R)
-            # print('handCards_K:',handCards_K)
+            # # print('Reyn_AI Log 读取手牌部分结束')
+            # # print('Reyn_AI Tip 当前读取到的手牌为')
+            # # print('handCards_S:',handCards_S)
+            # # print('handCards_H:',handCards_H)
+            # # print('handCards_C:',handCards_C)
+            # # print('handCards_D:',handCards_D)
+            # # print('handCards_A:',handCards_A)
+            # # print('handCards_R:',handCards_R)
+            # # print('handCards_K:',handCards_K)
             # 读取手牌部分结束
             # 开始计算地方卡牌权值
             card_opp = message['greaterAction']
@@ -2300,6 +2300,6 @@ def check_message(message, pos):
             if value[i] > max:
                 AI_choice = i
                 max = value[i]
-        # print(value)
+        # # print(value)
         return AI_choice
 

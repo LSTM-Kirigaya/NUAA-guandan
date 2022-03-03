@@ -1,6 +1,6 @@
 from random import randint
 from coach.EggPan.message_Reyn_CUR2 import check_message
-
+import os
 
 class Action(object):
     def __init__(self, render=True):
@@ -24,6 +24,8 @@ class Action(object):
         self.act_range = msg["indexRange"]
         if self.render:
             print(self.action)
+        
+
         #运行AI来确定需要出的牌
         self.AI_choice = check_message(msg, pos)
         #由于没有考虑进贡，故而随机，否则bug

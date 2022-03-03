@@ -43,7 +43,7 @@ class Main(WebSocketClient):
 
         if "actionList" in message:  # 需要做出动作选择时调用动作对象进行解析
             self.rounds += 1  # 回合数加1
-            print("handcards:", message["handCards"])
+            # print("handcards:", message["handCards"])
         # 解析当前state（服务器的message、agent剩余卡牌数量、目前的回合数、位置）
             if message["stage"] == "tribute":
                 act_index = 0

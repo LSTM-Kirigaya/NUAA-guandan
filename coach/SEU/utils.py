@@ -2,7 +2,7 @@ import copy
 def is_inStraight(action, straight_member):
 
     flag = 0
-    print(straight_member)
+    # print(straight_member)
     if len(straight_member) != 0:
         for card in action[2]:
             if card in straight_member:
@@ -276,8 +276,8 @@ def rest_cards(handcards,remaincards,rank):
             elif value[i] == 2:
                 rest_cards.append(key + val)
                 rest_cards.append(key + val)
-    if len(rest_cards)==0:
-        print(rest_cards)
+    # if len(rest_cards)==0:
+    #     print(rest_cards)
     card_value_s2v[str(rank)] = 15
     rest_cards = sorted(rest_cards,key = lambda item:card_value_s2v[item[1]])
     new_rest_cards = []
@@ -564,7 +564,7 @@ def getindex(tag, actList, actionList):
     my_act.append(myaction)
     my_act.append(mynumber)
     my_act.append(mycard)
-    print(my_act)
+    # print(my_act)
     if my_act in actionList:
         return actionList.index(my_act)
     else:
@@ -582,7 +582,7 @@ def getindex1(tag, actList, actionList):
     my_act.append(myaction)
     my_act.append(mynumber)
     my_act.append(mycard)
-    print(my_act)
+    # print(my_act)
     if my_act in actionList:
         return actionList.index(my_act)
     else:

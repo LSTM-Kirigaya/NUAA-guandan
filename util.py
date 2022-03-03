@@ -5,6 +5,8 @@ import numpy as np
 import os
 from colorama import Back, Style
 from datetime import datetime
+from collections import deque
+import random
 
 DEVICE = "cpu"
 
@@ -35,9 +37,9 @@ def encode_card(card_list):
     if card_list is None:
         return embedding_matrix
     for card in card_list:
-        if card == "PASS":      # 如果是PASS，那么用全0矩阵来表示这一次的行为
+        if   card == "PASS":      # 如果是PASS，那么用全0矩阵来表示这一次的行为
             return embedding_matrix
-        if  card == "SB":        # 如果是小王，只需要在14列加数字
+        if   card == "SB":        # 如果是小王，只需要在14列加数字
             embedding_matrix[3, 13] += 1
         elif card == "HR":       # 如果是大王，只需要在15列加数字
             embedding_matrix[3, 14] += 1
@@ -122,6 +124,62 @@ def now_str():
         now.year, now.month, now.day, now.hour, now.minute, now.second
     )
     return UUD
+
+class MemoryBuffer:
+    def __init__(self) -> None:
+        self.buffer = []
+
+    def append(self, state_tuple):
+        self.buffer.append(state_tuple)
+
+    def clear(self):
+        self.buffer.clear()
+    
+    def learn_from(self, gamma, optimizer, ValueNet):
+        # 从后到前更新
+        losses = []
+        final_reward = None
+        for i in range(len(self.buffer))[::-1]:
+            frame = self.buffer[i]
+            obs            = frame[0]
+            history        = frame[1]
+            act            = frame[2]
+            reward         = frame[3]
+            obs_next       = frame[4]
+            actionListNext = frame[5]
+            history_next   = frame[6]
+            done           = frame[7]
+            reward = torch.FloatTensor(reward)
+            if done:
+                final_reward = reward.item()
+                # 计算max Q(S, *)
+                q_values = []
+                for action_card in actionListNext:
+                    action = encode_card(process_card_list(action_card))
+                    state_input = torch.cat((obs_next.flatten(), action.flatten()), dim=0).float().to(DEVICE)
+                    state_action_input = state_input.unsqueeze(0).float().to(DEVICE)
+                    q_value : torch.Tensor = ValueNet(state_action_input, history_next).sum()
+                    q_values.append(q_value)
+
+                max_q = torch.argmax(q_values)
+                target = reward + gamma * max_q
+            else:
+                target = reward
+
+            # 计算Q(St, At)
+            action = encode_card(act)
+            state_input = torch.cat((obs.flatten(), action.flatten()), dim=0).float().to(DEVICE)
+            state_action_input = state_input.unsqueeze(0).float().to(DEVICE)
+            q_value = ValueNet(state_action_input, history).sum()
+
+            loss = torch.square(q_value - target)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            losses.append(loss.item())
+
+        self.clear()
+        return losses, final_reward
 
 if __name__ == "__main__":
     actionList = [['PASS', 'PASS', 'PASS'], ['Straight', 'T', ['ST', 'SJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'SJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'SJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'SJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'SJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'SJ', 'CQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'CQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'CQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'CQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'CQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'CQ', 'DK', 'HA']], ['Bomb', 'J', ['SJ', 'HJ', 'HJ', 'CJ']], ['StraightFlush', '7', ['S7', 'S8', 'S9', 'ST', 'SJ']], ['StraightFlush', '8', ['S8', 'S9', 'ST', 'SJ', 'SQ']], ['StraightFlush', '9', ['S9', 'ST', 'SJ', 'SQ', 'SK']]]

@@ -29,8 +29,6 @@ class ExampleClient(WebSocketClient):
         if "actionList" in message:                                           # 需要做出动作选择时调用动作对象进行解析
             # act_index = self.action.parse(message)
             
-            for k in message:
-                print(k, message[k])
             act_index = int(input("输入:"))
             self.send(json.dumps({"actIndex": act_index}))
 

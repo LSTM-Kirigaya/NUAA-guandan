@@ -15,14 +15,14 @@ parser.add_argument(
 )
 parser.add_argument(
     '-m', '--mode', default="il", 
-    help="训练模式, il代表模仿学习, rl代表强化学习"
+    help="训练模式, il代表模仿学习, rl代表强化学习, common代表普通运行"
 )
 parser.add_argument(
     '-r', '--round', default=-1, type=int,
     help="对局的次数, 该参数也可以直接在launch/config.yaml中修改"
 )
 parser.add_argument(
-    '--model', default=None,
+    '--model', default=None, type=str,
     help="已经存在的一个神经网络参数模型, 用于持久化训练" 
 )
 parser.add_argument(
@@ -37,13 +37,30 @@ parser.add_argument(
     '--log_interval', default=100, type=int,
     help="frequency of logging the situation of training"
 )
-
-for i in range(1, 5):
-    parser.add_argument(
-        "--agent{}".format(i), default="Demo",
-        help="{}号玩家的 client 智能体, 只需要是注册在案的就行, 默认是Demo, 也就是随机采样".format(i)
-    )
-
+parser.add_argument(
+    "--agent1", default="EggPan",
+    help="1号玩家的 client 智能体, 只需要是注册在案的就行, 默认是Demo, 也就是随机采样"
+)
+parser.add_argument(
+    "--agent2", default="Demo",
+    help="2号玩家的 client 智能体, 只需要是注册在案的就行, 默认是Demo, 也就是随机采样"
+)
+parser.add_argument(
+    "--agent3", default="Demo",
+    help="3号玩家的 client 智能体, 只需要是注册在案的就行, 默认是Demo, 也就是随机采样"
+)
+parser.add_argument(
+    "--agent4", default="Demo",
+    help="4号玩家的 client 智能体, 只需要是注册在案的就行, 默认是Demo, 也就是随机采样"
+)
+parser.add_argument(
+    '--epsilon', default=0.1, type=float,
+    help="epislon-greed strategy probility"
+)
+parser.add_argument(
+    '--gamma', default=0.98, type=float,
+    help="decount factor when doing reinforcement learning"
+)
 
 # 特殊的参数
 parser.add_argument(
@@ -82,14 +99,21 @@ if __name__ == "__main__":
         config_dict["1号玩家"] = ".\\clients\\imitation_client.py"
     elif args["mode"] == "rl":
         config_dict["1号玩家"] = ".\\clients\\reinforment_client.py"
+    elif args["mode"] == "common":
+        config_dict["1号玩家"] = ".\\clients\\client1.py"
 
     with open("launch/config.yaml", "w", encoding="utf-8") as fp:
         yaml.dump(config_dict, fp, Dumper=yaml.Dumper, allow_unicode=True)
 
-    ret = os.system("python -u ./launch/launch.py -d {} --model {} --lr {} --save_interval {} --log_interval {}".format(
+    ret = os.system("python -u ./launch/launch.py -d {} --model {} --lr {} --save_interval {} --log_interval {} \
+        --agent1 {} --agent2 {} --agent3 {} --agent4 {}".format(
         args["device"],
         args["model"],
         args["lr"],
         args["save_interval"],
-        args["log_interval"]
+        args["log_interval"],
+        args["agent1"],
+        args["agent2"],
+        args["agent3"],
+        args["agent4"]
     ))

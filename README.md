@@ -1,8 +1,8 @@
 # NUAA 2021 基于深度学习的掼蛋系统
 - [x] 模仿学习测试
 - [ ] 强化学习测试
-- [ ] 完成参数`agent1`的实现（难点：不同的coach代码实现形式不统一，需要进行整合）
-- [ ] 支持Linux
+- [ ] 完成参数`agent1`的实现（难点：不同的coach代码实现形式不统一，需要进行整合，提示：整合所有的parse函数）
+- [ ] 支持Linux（修改服务启动路径、修改launch.py干掉剩余进程的指令，改成kill）
 
 项目结构：
 ```
@@ -60,20 +60,24 @@ python -u launch/launch.py -h
 
 # 训练说明
 
+## 生成模型路径
 为了封装完整，模块化（~~为了摸鱼~~）。如果你需要训练模型，请不要修改`launch/config.yaml`文件，请直接使用`train.py`，且整个模型默认只训练第一个agent。
 
-训练产生的checkpoints默认会创建在`./model/checkpoints_年_月_日_时_分_秒`文件夹中。产生的每个pkl结构如下：
+训练产生的checkpoints默认会创建在`./model/checkpoints_年_月_日_时_分_秒`文件夹中。产生的每个pth结构如下：
 ```json
 {
     "coach" : COACH,   // 模仿学习初始化的 coach 模型
     "model_state_dict" : self.ValueNet.state_dict(),   // Q网络的state_dict
     "model_class"  : ActionValueNet   // 使用的神经网络的前馈类
 }
-
 ```
+
+## 断点续训
+
+`train.py`可以接受一个参数`model`，默认是`None`，即从头训练。如果你需要进行断点续训，请指派该参数，参数的内容为数据结构和上述描述的pth一致的（至少包含`model_state_dict`），如果输入的pickle同时包含`model_state_dict`与`model_class`，请确保它们保持一致。
 
 ---
 
 # 测试
 
-如果你像修改或添加`coach`中的代码，我强烈建议使用`unit_test/test_coach.py`进行验证。如果运行完该文件并没有报错，则说明编写的coach程序没有问题。同理，如果你需要修改我的多进程
+如果你像修改或添加`coach`中的代码，我强烈建议使用`unit_test/test_coach.py`进行验证。如果运行完该文件并没有报错，则说明编写的coach程序没有问题。同理，如果你需要修改我的多进程，在修改完后也请运行测试用例。

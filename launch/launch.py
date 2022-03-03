@@ -19,7 +19,7 @@ parser.add_argument(
     help="使用的运算设备, cpu或者cuda"
 )
 parser.add_argument(
-    '--model', default="",
+    '--model', default=None, type=str,
     help="已经存在的一个神经网络参数模型, 用于持久化训练" 
 )
 parser.add_argument(
@@ -35,13 +35,19 @@ parser.add_argument(
     help="frequency of logging the situation of training"
 )
 
-
 for i in range(1, 5):
     parser.add_argument(
         "--agent{}".format(i), default="Demo",
         help="{}号玩家的client, 只需要是注册在案的就行"
     )
-
+parser.add_argument(
+    '--epsilon', default=0.1, type=float,
+    help="epislon-greed strategy probility"
+)
+parser.add_argument(
+    '--gamma', default=0.98, type=float,
+    help="decount factor when doing reinforcement learning"
+)
 
 
 class ServeProcess(Process):
@@ -64,7 +70,7 @@ class ServeProcess(Process):
 
 class ClientProcess(Process):
     PYTHON_INTERPRETER = "python"
-    def __init__(self, path, render=True, client="Demo", device="cpu", model="", 
+    def __init__(self, path, render=False, client="Demo", device="cpu", model="", 
                        lr=None, save_interval=None, log_interval=None):
         super(ClientProcess, self).__init__()
         if isinstance(path, str):
@@ -82,10 +88,9 @@ class ClientProcess(Process):
     def run(self) -> None:
         try:
             if self.lr and self.save_interval and self.log_interval:
-                ret = os.system("{} -u {} -r {} -c {} -d {} --model {} --lr {} --save_interval {} --log_interval {}".format(
+                ret = os.system("{} -u {} -c {} -d {} --model {} --lr {} --save_interval {} --log_interval {}".format(
                     self.PYTHON_INTERPRETER, 
                     self.path, 
-                    self.render, 
                     self.client,
                     self.device,
                     self.model,
@@ -124,6 +129,7 @@ def check_process_group(process_group : List[Process]):
 
 if __name__ == "__main__":
     args = vars(parser.parse_args())
+
     # 使用LoadCoach函数检查输入的client是否在注册中
     for i in range(1, 5):
         _ = LoadCoach(args["agent{}".format(i)])

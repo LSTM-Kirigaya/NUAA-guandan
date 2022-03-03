@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
+# @Time       : 2022/2/20
+# @Author     : Zhelong Huang
+# @File       : client3.py
+# @Description: client3
+
 _POS = 3
 
-import json
-from ws4py.client.threadedclient import WebSocketClient
-from state import State
-from action import Action
-from ai_action import MLPAction
+import os, sys
+sys.path.append(os.path.abspath('.'))
 from coach import LoadCoach
 import argparse
 
