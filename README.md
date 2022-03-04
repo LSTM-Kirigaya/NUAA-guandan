@@ -81,7 +81,12 @@ model_state_dict : Q网络的state_dict
 model_class : 使用的神经网络的前馈类
 ```
 
-由于默认的console负责显示服务器打印的玩家出牌信息，所以训练过程的measurement展示在新创建的checkpoint文件夹的`value.log`文件中。请合理设置save_interval和log_interval参数，以免磁盘空间不够，或是过于频繁的IO占用过多的时钟周期。
+- 由于默认的console负责显示服务器打印的玩家出牌信息，所以训练过程的measurement展示在新创建的checkpoint文件夹的`value.log`文件中。你可以如下图进行训练调试：
+
+![](image\log.png)
+
+
+- 请合理设置save_interval和log_interval参数，以免磁盘空间不够，或是过于频繁的IO占用过多的时钟周期。
 
 ---
 

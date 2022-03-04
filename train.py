@@ -5,9 +5,7 @@
 # @Description: training wrapping launch.py
 
 import argparse
-
-from sympy import arg
-from util import check_path, lock_model_path
+from util import *
 import yaml, os
 
 parser = argparse.ArgumentParser()
@@ -111,6 +109,12 @@ if __name__ == "__main__":
         config_dict["1号玩家"] = ".\\clients\\reinforment_client.py"
     elif args["mode"] == "common":
         config_dict["1号玩家"] = ".\\clients\\client1.py"
+    elif args["mode"] == "test":
+        if args["model"] is None and args["lock_value"] is None and args["lock_reward"] is None:
+            debugout("mode 为 test 时, 必须指定模型路径!", "red")
+            exit(-1)
+        config_dict["1号玩家"] = ".\\clients\\test_client.py"
+
 
     with open("launch/config.yaml", "w", encoding="utf-8") as fp:
         yaml.dump(config_dict, fp, Dumper=yaml.Dumper, allow_unicode=True)

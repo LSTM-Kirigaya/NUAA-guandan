@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# @Time       : 2022/3/2
+# @Time       : 2022/2/20
 # @Author     : Zhelong Huang
 # @File       : model.py
 # @Description: forward model

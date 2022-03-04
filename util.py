@@ -151,7 +151,7 @@ class MemoryBuffer:
             actionListNext = frame[5]
             history_next   = frame[6]
             done           = frame[7]
-            reward = torch.FloatTensor([reward])
+            reward = torch.FloatTensor([reward]).to(device)
             if done == False:
                 rewards.append(reward.item())
                 # 计算max Q(S, *)
@@ -166,6 +166,7 @@ class MemoryBuffer:
                 max_q = torch.argmax(torch.tensor(q_values))
                 target = reward + gamma * max_q
             else:
+                rewards.append(reward.item())
                 target = reward
 
             # 计算Q(St, At)
@@ -173,7 +174,7 @@ class MemoryBuffer:
             state_input = torch.cat((obs.flatten(), action.flatten()), dim=0).float().to(device)
             state_action_input = state_input.unsqueeze(0).float().to(device)
 
-            q_value = ValueNet(state_action_input, history).sum()
+            q_value = ValueNet(state_action_input, history).sum().to(device)
 
             loss = torch.square(q_value - target)
             optimizer.zero_grad()

@@ -5,14 +5,11 @@ from colorama import Back, Style
 
 import matplotlib
 
-print(matplotlib.get_configdir())
-
 
 try:
     plt.style.use("gadfly")
 except:
     pass
-plt.style.use("gadfly")
 def DrawCheckpoints(checkpoint, root_dir=r".\model"):
     checkpoint_path = os.path.join(root_dir, checkpoint)
     for file in os.listdir(checkpoint_path):
@@ -65,13 +62,18 @@ def DrawCheckpoints(checkpoint, root_dir=r".\model"):
         plt.plot(counts, values, '--o')
         plt.ylabel("value", fontsize=label_fontsize)
         plt.xlabel("count", fontsize=label_fontsize)
+        plt.title("imitation learning")
     elif mode == "Reinforcement":
+        losses = np.array(losses)
+        rewards = np.array(rewards)
+        # losses = losses / max(losses)
+        rewards = (rewards - rewards.min()) / np.ptp(rewards) * 60000
         plt.plot(episodes, losses, '--o', label="loss")
         plt.plot(episodes, rewards, '--o', label="reward")
-        plt.ylabel("loss/reward", fontsize=label_fontsize)
+        plt.ylabel(r"$loss(\times1)/reward(\times60000)$", fontsize=label_fontsize)
         plt.xlabel("episode", fontsize=label_fontsize)
+        plt.title("reinforcement learning")
     
-
 
 DrawCheckpoints("checkpoints_2022_3_3_22_40_23")
 plt.legend()

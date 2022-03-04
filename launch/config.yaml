@@ -1,4 +1,4 @@
-1号玩家: .\clients\reinforment_client.py
+1号玩家: .\clients\test_client.py
 2号玩家: .\clients\client2.py
 3号玩家: .\clients\client3.py
 4号玩家: .\clients\client4.py
