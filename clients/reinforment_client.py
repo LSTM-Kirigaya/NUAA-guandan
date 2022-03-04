@@ -116,23 +116,24 @@ class ExampleClient(WebSocketClient):
             self.action.send_buffer()
 
             # 进行更新
-            losses, final_reward = self.action.replay_memory.learn_from(
+            losses, rewards = self.action.replay_memory.learn_from(
                 gamma=GAMMA, 
                 optimizer=self.action.optimizer,
-                ValueNet=self.action.ValueNet
+                ValueNet=self.action.ValueNet,
+                device=DEVICE
             )
             
             if self.episode % SAVE_INTERVAL == 0:
                 torch.save({
                     "coach" : COACH,
                     "MODE"  : MODE,
-                    "model_state_dict" : self.ValueNet.state_dict(),
+                    "model_state_dict" : self.action.ValueNet.state_dict(),
                     "model_class"  : ActionValueNet
-                }, CHECK_PATH + "/{}_minloss_{}.pth".format(now_str(), round(min(losses), 3)))
+                }, CHECK_PATH + "/{}_reward_{}.pth".format(now_str(), round(sum(rewards), 3)))
         
             if self.episode % LOG_INTERVAL == 0:
                 with open(CHECK_PATH + "/value.log", "a", encoding="utf-8") as fp:
-                    fp.write("[count={}] avgloss = {} reward = {}\n".format(self.count, np.mean(losses), final_reward))
+                    fp.write("[epsiode={}] avgloss = {} reward = {}\n".format(self.episode, np.mean(losses), sum(rewards)))
              
 
         if "actionList" in message:                                           
@@ -187,9 +188,10 @@ class MLPAction(object):
     
     def update_pre(self, obs, history, act):
         self.temp_store["obs"] = obs
-        self.temp_store["history"] == history
+        self.temp_store["history"] = history
         self.temp_store["act"] = act
-    
+
+
     def update_post(self, reward, obs_next, actionListNext, history_next, done):
         self.temp_store["reward"] = reward
         self.temp_store["obs_next"] = obs_next
@@ -197,7 +199,7 @@ class MLPAction(object):
         self.temp_store["history_next"] = history_next
         self.temp_store["done"] = done
 
-    # 将缓存发送给 回放池
+   # 将缓存发送给 回放池
     def send_buffer(self):
         self.replay_memory.append((
             self.temp_store["obs"],
@@ -236,10 +238,10 @@ class MLPAction(object):
         
         act = process_card_list(self.action[index])
         self.update_post(reward=0, obs_next=state, actionListNext=self.action, history_next=history, done=False)
-        if self.temp_store["obs"] is not None:
+        if self.temp_store["obs"] is not None and self.temp_store["history"] is not None:
             self.send_buffer()
-        self.update_pre(obs=state, history=history, act=act)
 
+        self.update_pre(obs=state, history=history, act=act)
         # 输入： state, action, history
         # 整合策略： state + history -> state  action -> action
 

@@ -7,8 +7,8 @@ from colorama import Back, Style
 from datetime import datetime
 from collections import deque
 import random
+from tqdm import tqdm
 
-DEVICE = "cpu"
 
 card_color = ['S', 'H', 'C', 'D']
 card_score = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
@@ -135,11 +135,13 @@ class MemoryBuffer:
     def clear(self):
         self.buffer.clear()
     
-    def learn_from(self, gamma, optimizer, ValueNet):
+    def learn_from(self, gamma, optimizer, ValueNet, device):
         # 从后到前更新
         losses = []
-        final_reward = None
-        for i in range(len(self.buffer))[::-1]:
+        rewards = []
+        iter_wrapper = tqdm(range(len(self.buffer))[::-1])
+        iter_wrapper.set_description_str("training")
+        for i in iter_wrapper:
             frame = self.buffer[i]
             obs            = frame[0]
             history        = frame[1]
@@ -151,26 +153,26 @@ class MemoryBuffer:
             done           = frame[7]
             reward = torch.FloatTensor([reward])
             if done == False:
-                print(reward, type(reward), reward.shape)
-                final_reward = reward.item()
+                rewards.append(reward.item())
                 # 计算max Q(S, *)
                 q_values = []
                 for action_card in actionListNext:
                     action = encode_card(process_card_list(action_card))
-                    state_input = torch.cat((obs_next.flatten(), action.flatten()), dim=0).float().to(DEVICE)
-                    state_action_input = state_input.unsqueeze(0).float().to(DEVICE)
+                    state_input = torch.cat((obs_next.flatten(), action.flatten()), dim=0).float().to(device)
+                    state_action_input = state_input.unsqueeze(0).float().to(device)
                     q_value : torch.Tensor = ValueNet(state_action_input, history_next).sum()
                     q_values.append(q_value)
 
-                max_q = torch.argmax(q_values)
+                max_q = torch.argmax(torch.tensor(q_values))
                 target = reward + gamma * max_q
             else:
                 target = reward
 
             # 计算Q(St, At)
             action = encode_card(act)
-            state_input = torch.cat((obs.flatten(), action.flatten()), dim=0).float().to(DEVICE)
-            state_action_input = state_input.unsqueeze(0).float().to(DEVICE)
+            state_input = torch.cat((obs.flatten(), action.flatten()), dim=0).float().to(device)
+            state_action_input = state_input.unsqueeze(0).float().to(device)
+
             q_value = ValueNet(state_action_input, history).sum()
 
             loss = torch.square(q_value - target)
@@ -180,7 +182,7 @@ class MemoryBuffer:
             losses.append(loss.item())
 
         self.clear()
-        return losses, final_reward
+        return losses, rewards
 
 def lock_model_path(value, model_root="./model", keyword="value", reverse=True):
     iter_obj = os.listdir(model_root)
@@ -194,6 +196,11 @@ def lock_model_path(value, model_root="./model", keyword="value", reverse=True):
                 if params[-2] == keyword and float(params[-1]) == value:
                     return os.path.join(check_path, pth)
     return ""
+
+def debugout(text, color : str = "BLUE"):
+    pre_obj = getattr(Back, color.upper())
+    print(pre_obj, text, Style.RESET_ALL)
+
 
 if __name__ == "__main__":
     actionList = [['PASS', 'PASS', 'PASS'], ['Straight', 'T', ['ST', 'SJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'SJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'SJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'SJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'SJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'SJ', 'CQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'HJ', 'CQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['ST', 'CJ', 'CQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'SJ', 'CQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'HJ', 'CQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'SQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'SQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'HQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'HQ', 'DK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'CQ', 'SK', 'HA']], ['Straight', 'T', ['DT', 'CJ', 'CQ', 'DK', 'HA']], ['Bomb', 'J', ['SJ', 'HJ', 'HJ', 'CJ']], ['StraightFlush', '7', ['S7', 'S8', 'S9', 'ST', 'SJ']], ['StraightFlush', '8', ['S8', 'S9', 'ST', 'SJ', 'SQ']], ['StraightFlush', '9', ['S9', 'ST', 'SJ', 'SQ', 'SK']]]
